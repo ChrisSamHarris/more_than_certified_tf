@@ -1,3 +1,6 @@
+# cloned repositories ignored from Git
+**/mtc-*
+
 # Local .terraform directories
 .terraform/
 
