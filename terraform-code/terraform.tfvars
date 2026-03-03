@@ -3,15 +3,18 @@ env            = "dev"
 
 deployment_environments = {
   dev = {
-    lang     = "terraform",
+    lang     = "Terraform",
     filename = "main.tf"
+    pages    = true
   },
   staging = {
-    lang     = "python",
+    lang     = "Python",
     filename = "main.py"
+    pages    = false
   },
   prod = {
-    lang     = "terraform",
+    lang     = "Terraform",
     filename = "main.tf"
+    pages    = false
   }
 }

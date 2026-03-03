@@ -26,15 +26,15 @@ variable "deployment_environments" {
   description = "Set of environments for which to create the repositories"
   default = {
     dev = {
-      lang     = "terraform"
+      lang     = "Terraform"
       filename = "main.tf"
     }
     staging = {
-      lang     = "python"
+      lang     = "Python"
       filename = "main.py"
     }
     prod = {
-      lang     = "terraform"
+      lang     = "Terraform"
       filename = "main.tf"
     }
   }
