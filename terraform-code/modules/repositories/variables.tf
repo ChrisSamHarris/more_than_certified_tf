@@ -4,7 +4,7 @@ variable "repo_max_count" {
   default     = 3
 
   validation {
-    condition     = var.repo_max_count <= 3
+    condition     = var.repo_max_count <= 10
     error_message = "repo_max_count must be less than or equal to 3."
   }
 }
@@ -22,20 +22,27 @@ variable "env" {
 }
 
 variable "deployment_environments" {
-  type        = map(map(string))
+  type = map(object({
+    lang     = string
+    filename = string
+    pages    = bool
+  }))
   description = "Set of environments for which to create the repositories"
   default = {
-    dev = {
+    infra = {
       lang     = "Terraform"
       filename = "main.tf"
+      pages    = true
     }
-    staging = {
+    data-science = {
       lang     = "Python"
       filename = "main.py"
+      pages    = false
     }
-    prod = {
+    production = {
       lang     = "Terraform"
       filename = "main.tf"
+      pages    = false
     }
   }
 
@@ -44,8 +51,8 @@ variable "deployment_environments" {
     error_message = "Deployment environments list must contain at least one environment."
   }
   validation {
-    condition     = alltrue([for env in keys(var.deployment_environments) : contains(["dev", "staging", "prod"], env)])
-    error_message = "All deployment environments must be one of 'dev', 'staging', or 'prod'."
+    condition     = alltrue([for env in keys(var.deployment_environments) : contains(["infra", "data-science", "production"], env)])
+    error_message = "All deployment environments must be one of 'infra', 'data-science', or 'production'."
   }
   validation {
     condition     = length(var.deployment_environments) <= var.repo_max_count

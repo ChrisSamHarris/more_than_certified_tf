@@ -1,0 +1,22 @@
+# Portfolio
+
+## About Me
+
+<img src="${avatar_url}" alt="Profile Picture" width="250" height="150">
+
+Hi, I'm ${username} [${name}] - Check out my repos! 
+
+## Projects 
+
+| Project Name | Link | WebPage |
+| --- | --- | --- |
+%{ for repo_key, repo_value in repo_dev ~}
+| ${repo_key} | [GitHub](${repo_value["Repo-URL"]}) | %{if repo_value["GH-Pages-URL"] != "No GH Pages configured"}[Pages](${repo_value["GH-Pages-URL"]})%{else}No Page%{endif} |
+%{ endfor ~}
+%{~ for repo_key, repo_value in repo_staging ~}
+| ${repo_key} | [GitHub](${repo_value["Repo-URL"]}) | %{if repo_value["GH-Pages-URL"] != "No GH Pages configured"}[Pages](${repo_value["GH-Pages-URL"]})%{else}No Page%{endif} |
+%{ endfor}
+
+---
+
+(c) ${date} ${username}
