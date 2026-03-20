@@ -16,4 +16,6 @@ locals {
       pages    = false
     }
   }
+
+  repos = { for k, v in data.terraform_remote_state.repos.outputs.repo-info : k => v.repository_name_urls }
 }
