@@ -27,8 +27,8 @@ resource "github_repository_file" "index" {
     date         = time_static.build-time.year
     name         = data.github_user.current.name
     username     = data.github_user.current.login
-    repo_staging = var.repo_staging
-    repo_dev     = var.repo_dev
+    repo_staging = local.repos["staging"]["mtc-infra-staging"]["Repo-URL"]
+    repo_dev     = local.repos["dev"]["mtc-infra-dev"]["Repo-URL"]
   })
   file                = "index.md"
   branch              = "main"
