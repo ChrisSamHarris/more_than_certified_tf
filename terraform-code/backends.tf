@@ -1,5 +1,15 @@
+# terraform {
+#   backend "local" {
+#     path = "../state/terraform.tfstate"
+#   }
+# }
+
 terraform {
-  backend "local" {
-    path = "../state/terraform.tfstate"
+  cloud {
+    organization = "remote-mtc"
+
+    workspaces {
+      name = "dev"
+    }
   }
 }

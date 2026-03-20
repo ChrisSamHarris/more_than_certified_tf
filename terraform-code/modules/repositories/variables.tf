@@ -51,11 +51,16 @@ variable "deployment_environments" {
     error_message = "Deployment environments list must contain at least one environment."
   }
   validation {
-    condition     = alltrue([for env in keys(var.deployment_environments) : contains(["infra", "data-science", "production"], env)])
-    error_message = "All deployment environments must be one of 'infra', 'data-science', or 'production'."
+    condition     = alltrue([for env in keys(var.deployment_environments) : contains(["infra", "data-science", "production", "frontend", "backend"], env)])
+    error_message = "All deployment environments must be one of 'infra', 'data-science', 'production', 'frontend', or 'backend'."
   }
   validation {
     condition     = length(var.deployment_environments) <= var.repo_max_count
     error_message = "The number of deployment environments must not exceed repo_max_count."
   }
+}
+
+variable "run_provisioners" {
+  type    = bool
+  default = true
 }
