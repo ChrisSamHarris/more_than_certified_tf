@@ -1,3 +1,7 @@
+data "github_user" "current" {
+  username = ""
+}
+
 data "terraform_remote_state" "repos" {
   backend = "remote"
 
