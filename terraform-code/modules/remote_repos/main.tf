@@ -12,10 +12,3 @@ module "repos" {
   deployment_environments = local.deployment_repositories
   run_provisioners        = var.run_provisioners
 }
-
-# module "info_page" {
-#   source           = "./modules/info-page"
-#   repo_staging     = module.repos["staging"].repository_name_urls
-#   repo_dev         = module.repos["dev"].repository_name_urls
-#   run_provisioners = var.run_provisioners
-# }
