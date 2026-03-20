@@ -24,9 +24,10 @@ resource "github_repository" "mtc_repo" {
 
   provisioner "local-exec" {
     # only open the browser for the dev environment, as it's public; for staging and prod, we skip opening the browser since they are private repositories.
-    command = each.key == "dev" ? "gh repo view ${self.name} --web" : "echo 'Skipping browser open for ${each.key} environment'"
+    command = var.run_provisioners && each.key == "dev" ? "gh repo view ${self.name} --web" : "echo 'Skipping browser open for ${each.key} environment'"
   }
   provisioner "local-exec" {
+    # circular dependency so it won't accept a dependency on a potentially deleted variable - as such, no dependency on var.run_provisioners required
     command = "rm -rf ${self.name}"
     when    = destroy
   }
@@ -37,7 +38,7 @@ resource "terraform_data" "repo-clone" {
   depends_on = [github_repository_file.readme, github_repository_file.main]
 
   provisioner "local-exec" {
-    command = "gh repo clone ${github_repository.mtc_repo[each.key].name}"
+    command = var.run_provisioners ? "gh repo clone ${github_repository.mtc_repo[each.key].name}" : "echo 'Skipping repository clone for ${github_repository.mtc_repo[each.key].name}'"
   }
 }
 

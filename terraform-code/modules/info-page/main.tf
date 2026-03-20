@@ -11,20 +11,12 @@ resource "github_repository" "intro-repo" {
   }
 
   provisioner "local-exec" {
-    command = "gh repo view ${self.name} --web"
+    command = var.run_provisioners ? "gh repo view ${self.name} --web" : "echo 'Provisioners are disabled. Set run_provisioners to true to enable.'"
   }
 }
 
 resource "time_static" "build-time" {
   # this datasource is used to capture the build time of the repository, which is then used in the index.md file to display the build date.
-}
-
-variable "repo_staging" {
-  type = map(any)
-}
-
-variable "repo_dev" {
-  type = map(any)
 }
 
 resource "github_repository_file" "index" {
