@@ -9,10 +9,6 @@ resource "github_repository" "intro-repo" {
       path   = "/"
     }
   }
-
-  provisioner "local-exec" {
-    command = var.run_provisioners ? "gh repo view ${self.name} --web" : "echo 'Provisioners are disabled. Set run_provisioners to true to enable.'"
-  }
 }
 
 resource "time_static" "build-time" {
