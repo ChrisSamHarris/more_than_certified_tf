@@ -37,9 +37,9 @@ resource "aws_route" "infra-r" {
 }
 
 resource "aws_subnet" "infra-subnet" {
-  for_each          = { for i in range(var.num_subnets) : "public-${i}" => i }
-  vpc_id            = aws_vpc.infra-vpc.id
-  cidr_block        = cidrsubnet(aws_vpc.infra-vpc.cidr_block, 8, each.value)
+  for_each   = { for i in range(var.num_subnets) : "public-${i}" => i }
+  vpc_id     = aws_vpc.infra-vpc.id
+  cidr_block = cidrsubnet(aws_vpc.infra-vpc.cidr_block, 8, each.value)
   # modulo operator to cycle through availability zones for each subnet
   # ensures subnets are distributed across different AZs for high availability
   availability_zone = local.a_zones[each.value % length(local.a_zones)]
@@ -61,7 +61,7 @@ resource "aws_lb" "infra-lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.infra-alb-sg.id]
-  subnets            = [for subnet in aws_subnet.infra-subnet : subnet.id]
+  subnets            = [for az, id in { for s in aws_subnet.infra-subnet : s.availability_zone => s.id... } : id[0]]
 
   enable_deletion_protection = false
 

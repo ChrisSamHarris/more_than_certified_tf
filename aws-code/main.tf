@@ -6,18 +6,23 @@ module "infra" {
 }
 
 module "logic" {
-  source             = "./modules/logic"
-  ecr_repo_name      = "mtc-ecs-repo"
-  app_ui             = "ui"
-  image_version      = "1.0.0"
-  app_name           = "mtc-ecs-app"
-  port               = 80
-  execution_role_arn = module.infra.execution-role-arn
-  cluster_arn        = module.infra.aws-ecs-cluster
-  subnets            = module.infra.mtc-subnets
-  ecs_app_sg_id      = [module.infra.ecs-app-sg]
-  is_public          = true
-  vpc_id             = module.infra.vpc-id
-  path_pattern       = "/*"
-  alb_listener_arn   = module.infra.alb_listener_arn
+  # changed to locals for better readability and maintainability
+  # In order to prevent a destryo I moved the state 
+  # terraform state mv 'module.logic' 'module.logic["primary_app"]'
+  source = "./modules/logic"
+
+  for_each           = local.application_configurations
+  ecr_repo_name      = local.application_configurations[each.key].ecr_repo_name
+  app_ui             = local.application_configurations[each.key].app_ui
+  image_version      = local.application_configurations[each.key].image_version
+  app_name           = local.application_configurations[each.key].app_name
+  port               = local.application_configurations[each.key].port
+  execution_role_arn = local.application_configurations[each.key].execution_role_arn
+  cluster_arn        = local.application_configurations[each.key].cluster_arn
+  subnets            = local.application_configurations[each.key].subnets
+  ecs_app_sg_id      = local.application_configurations[each.key].ecs_app_sg_id
+  is_public          = local.application_configurations[each.key].is_public
+  vpc_id             = local.application_configurations[each.key].vpc_id
+  path_pattern       = local.application_configurations[each.key].path_pattern
+  alb_listener_arn   = local.application_configurations[each.key].alb_listener_arn
 }

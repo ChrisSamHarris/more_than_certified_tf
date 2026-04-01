@@ -14,6 +14,10 @@ output "mtc-subnets" {
   value = [for i in aws_subnet.infra-subnet : i.id]
 }
 
+output "all-infra-subnets" {
+  value = aws_subnet.infra-subnet
+}
+
 output "ecs-app-sg" {
   value = aws_security_group.infra-app-sg.id
 }
