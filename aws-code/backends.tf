@@ -11,6 +11,7 @@
 
 #  1050  terraform state pull > terraform.tfstate
 #  saved state to freshly provisioned S3 bucket
+# create resource block for remote state backend
 #  1051  terraform init -reconfigure
 #  1052  terraform state list
 
