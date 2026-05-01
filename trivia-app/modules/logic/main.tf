@@ -17,7 +17,7 @@ resource "terraform_data" "build" {
   depends_on = [terraform_data.login]
   provisioner "local-exec" {
     command = <<EOT
-        docker build --platform linux/amd64 -t ${local.ecr_url} ${path.module}/apps/${var.app_ui}
+        docker build --platform linux/amd64 -t ${local.ecr_url} ${path.module}/application-logic/${var.app_ui}
         EOT
   }
 }
