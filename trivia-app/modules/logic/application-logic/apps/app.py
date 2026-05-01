@@ -5,18 +5,15 @@ from openai import OpenAI
 st.set_page_config(page_title="ChatGPT", page_icon="💬", layout="centered")
 st.title("💬 ChatGPT")
 
+api_key = os.environ.get("OPENAI_API_KEY")
+
 # Initialise chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Sidebar — API key and model
+# Sidebar — model selection only
 with st.sidebar:
     st.header("Settings")
-    api_key = st.text_input(
-        "OpenAI API Key",
-        value=os.environ.get("OPENAI_API_KEY", ""),
-        type="password",
-    )
     model = st.selectbox(
         "Model",
         ["gpt-5.4-nano","gpt-5.4-mini","gpt-5.4"],
@@ -34,7 +31,7 @@ for message in st.session_state.messages:
 # Chat input
 if prompt := st.chat_input("Message ChatGPT..."):
     if not api_key:
-        st.error("Enter your OpenAI API key in the sidebar.")
+        st.error("OPENAI_API_KEY is not configured on the server.")
         st.stop()
 
     # Append and display user message

@@ -14,3 +14,9 @@ variable "num_subnets" {
 variable "allowed_ips" {
   type = set(string)
 }
+
+variable "gpt_secret_arn" {
+  type        = string
+  description = "GPT Key Secret Manager ARN"
+  sensitive   = true
+}

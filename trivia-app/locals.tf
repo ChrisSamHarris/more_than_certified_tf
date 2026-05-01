@@ -2,10 +2,10 @@ locals {
   application_configurations = {
     primary_app = {
       ecr_repo_name      = "mtc-ecs-repo",
-      app_ui             = "ui",
+      app_ui             = "apps",
       image_version      = "1.0.0",
       app_name           = "mtc-ecs-app",
-      port               = 80,
+      port               = 8501,
       execution_role_arn = module.infra.execution-role-arn,
       cluster_arn        = module.infra.aws-ecs-cluster,
       subnets            = module.infra.mtc-subnets,

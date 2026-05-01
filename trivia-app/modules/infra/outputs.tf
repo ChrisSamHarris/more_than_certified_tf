@@ -3,7 +3,7 @@ output "aws_subnets" {
 }
 
 output "execution-role-arn" {
-  value = aws_iam_role.logic-iam-role.arn
+  value = aws_iam_role.ecs_task_execution.arn
 }
 
 output "aws-ecs-cluster" {

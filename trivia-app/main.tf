@@ -2,7 +2,9 @@ module "infra" {
   source      = "./modules/infra"
   vpc_cidr    = "10.0.0.0/16"
   num_subnets = 2
-  allowed_ips = ["0.0.0.0/0"]
+  # allowed_ips    = ["0.0.0.0/0"]
+  allowed_ips    = ["84.71.199.185/32"]
+  gpt_secret_arn = module.logic["primary_app"].gpt_secret_arn
 }
 
 module "logic" {

@@ -59,7 +59,7 @@ resource "aws_ecs_task_definition" "logic-ecs-task" {
       ]
       secrets = [{
         name      = "OPENAI_API_KEY"
-        valueFrom = data.aws_secretsmanager_secret.api-key.arn
+        valueFrom = "${data.aws_secretsmanager_secret.api-key.arn}:OPENAI_API_KEY::"
       }]
     }
   ])
@@ -79,14 +79,14 @@ resource "aws_ecs_service" "logic-ecs-service" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.logic-target-group.arn
+    target_group_arn = aws_lb_target_group.logic-target-group-migrate.arn
     container_name   = var.app_name
     container_port   = var.port
   }
 }
 
-resource "aws_lb_target_group" "logic-target-group" {
-  name        = "mtc-ecs-tg"
+resource "aws_lb_target_group" "logic-target-group-migrate" {
+  name        = "mtc-ecs-tg-BACKUP"
   port        = var.port
   protocol    = "HTTP"
   target_type = "ip"
@@ -99,7 +99,7 @@ resource "aws_lb_listener_rule" "static" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.logic-target-group.arn
+    target_group_arn = aws_lb_target_group.logic-target-group-migrate.arn
   }
 
   condition {
@@ -107,28 +107,4 @@ resource "aws_lb_listener_rule" "static" {
       values = [var.path_pattern]
     }
   }
-}
-
-# TO REVIEW - Task definition and service resources
-resource "aws_iam_role" "ecs_task_execution" {
-  name               = "mtc-ecs-task-execution-role"
-  assume_role_policy = data.aws_iam_policy_document.ecs_assume_role.json
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_managed" {
-  role       = aws_iam_role.ecs_task_execution.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
-# Grant the role access to read this specific secret
-resource "aws_iam_role_policy" "secrets_access" {
-  role = aws_iam_role.ecs_task_execution.id
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect   = "Allow"
-      Action   = ["secretsmanager:GetSecretValue"]
-      Resource = data.aws_secretsmanager_secret.api-key.arn
-    }]
-  })
 }
